@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.digital.ho.hocs.document.DocumentDataService;
 import uk.gov.digital.ho.hocs.document.application.RequestData;
+import uk.gov.digital.ho.hocs.document.aws.TestConfiguration;
 import uk.gov.digital.ho.hocs.document.dto.camel.ProcessDocumentRequest;
 import uk.gov.digital.ho.hocs.document.model.DocumentData;
 import uk.gov.digital.ho.hocs.document.model.DocumentStatus;
@@ -55,8 +56,6 @@ public class DocumentConsumerIT {
 
     @Autowired
     ObjectMapper mapper;
-
-    private int LOCAL_S3_PORT = 9003;
 
     @Autowired
     @Qualifier("UnTrusted")
@@ -315,7 +314,7 @@ public class DocumentConsumerIT {
 
     private void startMockS3Service() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(S3MockApplication.PROP_HTTP_PORT, LOCAL_S3_PORT);
+        properties.put(S3MockApplication.PROP_HTTP_PORT, TestConfiguration.LOCAL_S3_PORT);
         properties.put(S3MockApplication.PROP_SECURE_CONNECTION, false);
         properties.put(S3MockApplication.PROP_SILENT, false);
         properties.put(S3MockApplication.PROP_INITIAL_BUCKETS, trustedBucketName + ", " + untrustedBucketName);

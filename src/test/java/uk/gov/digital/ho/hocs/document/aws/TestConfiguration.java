@@ -12,9 +12,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.Random;
+
 @Configuration
 @Profile("test")
 public class TestConfiguration {
+
+    public static int LOCAL_S3_PORT = 9003 + new Random().nextInt(900);
 
     @Bean("Trusted")
     public AmazonS3 trustedS3Client() {
@@ -27,7 +31,7 @@ public class TestConfiguration {
     }
 
     public AmazonS3 s3Client() {
-        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:9003/", "eu-west-2");
+        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration(String.format("http://localhost:%s/", this.LOCAL_S3_PORT), "eu-west-2");
 
         return AmazonS3ClientBuilder.standard()
                 .withClientConfiguration(new ClientConfiguration().withProtocol(Protocol.HTTP))
